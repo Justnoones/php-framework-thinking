@@ -1,6 +1,4 @@
 <?php
-require_once "./bootstrap.php";
+require_once "core/bootstrap.php";
 
-$users = QueryBuilder::all("users");
-
-require_once "./index.view.php";
+Router::load("core/routes.php")->direct(Request::uri());

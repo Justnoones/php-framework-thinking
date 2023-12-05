@@ -1,5 +1,5 @@
-.env
+core/.env
 
-composer.lock
+core/composer.lock
 
-vendor
+core/vendor

@@ -1,4 +1,5 @@
 <?php
+require_once "vendor/autoload.php";
 require_once "core/bootstrap.php";
 
-Router::load("core/routes.php")->direct(Request::uri());
+Router::load("routes.php")->direct(Request::uri(), Request::method());

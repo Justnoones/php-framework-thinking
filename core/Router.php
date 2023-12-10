@@ -2,12 +2,14 @@
 
 class Router
 {
-    public $routes = [];
+    public $routes = [
+        "GET" => [],
+        "POST" => []
+    ];
 
     public static function load ($file_name) {
         $router = new Router;
         require_once $file_name;
-        $router->register($routes);
         return $router;
     }
 
@@ -15,11 +17,19 @@ class Router
         $this->routes = $routes;
     }
 
-    public function direct ($uri) {
-        if (array_key_exists($uri, $this->routes)) {
-            require_once $this->routes[$uri];
+    public function get ($uri, $controller) {
+        $this->routes["GET"][$uri] = $controller;
+    }
+
+    public function post ($uri, $controller) {
+        $this->routes["POST"][$uri] = $controller;
+    }
+
+    public function direct ($uri, $method) {
+        if (array_key_exists($uri, $this->routes[$method])) {
+            require_once $this->routes[$method][$uri];
         } else {
-            return "404 Page Not Found";
+            require_once "views/NotFound404Page.php";
         }
     }
 }

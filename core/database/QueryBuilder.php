@@ -31,4 +31,26 @@ class QueryBuilder
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function insert ($data, $dbname) {
+        $arrayKeys = array_keys($data);
+        $tableColumns = implode(", ",$arrayKeys);
+
+        $bindingColumns = [];
+        foreach ($arrayKeys as $arrayKey) {
+            $bindingColumns[] = ":$arrayKey";
+        }
+        $bindingColumns = implode(", ", $bindingColumns);
+
+        $executeKeys = explode(", ", $bindingColumns);
+        $executeArrays = [];
+        foreach ($executeKeys as $executeArray) {
+            $executeArrays[$executeArray] = $data[trim($executeArray, ":")];
+        }
+
+        $sql = "INSERT INTO $dbname ($tableColumns) VALUES
+        ($bindingColumns)";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($executeArrays);
+    }
 }

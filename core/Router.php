@@ -27,9 +27,15 @@ class Router
 
     public function direct ($uri, $method) {
         if (array_key_exists($uri, $this->routes[$method])) {
-            require_once $this->routes[$method][$uri];
+            $parts = explode("@", $this->routes[$method][$uri]);
+            $this->callMethod($parts[0], $parts[1]);
         } else {
-            require_once "views/NotFound404Page.php";
+            return require_once "views/NotFound404Page.php";
         }
+    }
+
+    public function callMethod ($class, $method) {
+        $class = new $class;
+        $class->$method();
     }
 }

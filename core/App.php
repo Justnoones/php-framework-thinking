@@ -1,5 +1,5 @@
 <?php
-
+namespace core;
 class App
 {
     protected static $datas = [];

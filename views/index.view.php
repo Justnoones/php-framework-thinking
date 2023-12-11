@@ -8,7 +8,7 @@
         <article><?=$user['name']?></article>
     <?php endforeach ?>
     <h1>Add Name Page</h1>
-    <form action="/addname" method="POST">
+    <form action="/adduser" method="POST">
         <label for="name">Name</label>
         <input type="text" name="name" id="name" placeholder="Enter Your Name..." />
         <button type="submit">Submit</button>

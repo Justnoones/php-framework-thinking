@@ -1,4 +1,7 @@
 <?php
-$router->get("", "Controller@index");
-$router->get("home", "Controller@home");
-$router->post("adduser", "Controller@addUser");
+
+use controllers\Controller;
+
+$router->get("", [Controller::class, "index"]);
+$router->get("home", [Controller::class, "home"]);
+$router->post("adduser", [Controller::class, "addUser"]);

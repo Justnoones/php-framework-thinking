@@ -13,3 +13,21 @@ function view ($fileName, $data=[]) {
     );
     return require_once "views/$fileName.view.php";
 }
+
+function redirect ($url) {
+    return header("Location: $url");
+}
+
+function request ($name="") {
+    if ($_SERVER["REQUEST_METHOD"] === "GET") {
+        if ($name) {
+            return $_GET[$name];
+        }
+        return $_GET;
+    } else {
+        if ($name) {
+            return $_POST[$name];
+        }
+        return $_POST;
+    }
+}

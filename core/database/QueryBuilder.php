@@ -9,13 +9,17 @@ class QueryBuilder
         self::$spdo = $pdo;
     }
 
-    public function find ($db, $param) {
-        $stmt = $this->pdo->prepare("SELECT * FROM $db WHERE id = :param");
+    public function find ($id, $db) {
+        $sql = "SELECT * FROM $db WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
-            ":param" => $param
+            ":id" => $id
         ]);
-
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$data) {
+            return false;
+        }
+        return $data;
     }
 
     public function get ($db) {
@@ -52,5 +56,43 @@ class QueryBuilder
         ($bindingColumns)";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($executeArrays);
+    }
+
+    public function destory ($id, $dbname) {
+        $sql = "DELETE FROM $dbname WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $status = $stmt->execute([
+            ":id" => $id
+        ]);
+        return $status;
+    }
+
+    public function update ($data, $dbname) {
+        $arrayKeys = array_keys($data);
+        $bind = "";
+        $id = $data["id"];
+
+        for ($i=0; $i < count($arrayKeys); $i++) {
+            if ($i+1 == count($arrayKeys)) {
+                $bind .= "$arrayKeys[$i] = :$arrayKeys[$i]";
+                break;
+            }
+            // if ($arrayKeys[$i] == "id") {
+            //     continue;
+            // }
+            $bind .= "$arrayKeys[$i] = :$arrayKeys[$i],";
+        }
+        
+        $sql = "UPDATE $dbname
+            SET $bind
+            WHERE id = :id";
+
+        $executeArrays = [];
+        for ($i=0; $i < count($arrayKeys); $i++) {
+            $executeArrays[":$arrayKeys[$i]"] = $data[$arrayKeys[$i]];
+        }
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($executeArrays);
+        return $id;
     }
 }

@@ -16,3 +16,8 @@
 </head>
 <body>
 <?php require "views/components/navbar.php" ?>
+
+<?php if ($_COOKIE["flashmessage"]) : ?>
+    <h1><?=$_COOKIE["flashmessage"]?></h1>
+<?php setcookie("flashmessage", "", time()-1) ?>
+<?php endif ?>
